@@ -22,6 +22,8 @@ def read(name):
         return None
     dt = np.dtype(DT[code])
     n = w * h * c * dt.itemsize
+    if 64 + n > shm.size:
+        return None
     a = np.frombuffer(shm.buf[64:64 + n], dtype=dt).reshape(h, w, c).copy()
     if int(head[0]) != s:
         return None

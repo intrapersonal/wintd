@@ -47,7 +47,7 @@ class ImageOut:
             except Exception:
                 self.spout = None
         if self.spout is None:
-            self.shm = SlotWriter(name, capacity)
+            self.shm = SlotWriter(name + "_px", capacity)
 
     def send_bgr(self, bgr, alpha=None):
         if self.mode == "spout":
@@ -62,7 +62,7 @@ class ImageOut:
             self.spout.close()
             self.spout = None
             self.mode = "shm"
-            self.shm = SlotWriter(self.name, self.capacity)
+            self.shm = SlotWriter(self.name + "_px", self.capacity)
         rgb = bgr[::-1, :, ::-1]
         if alpha is not None:
             alpha = alpha[::-1]
@@ -81,7 +81,7 @@ class ImageOut:
 
 class DataOut:
     def __init__(self, name, capacity):
-        self.shm = SlotWriter(name, capacity)
+        self.shm = SlotWriter(name + "_px", capacity)
 
     def send(self, arr):
         self.shm.write(arr)
