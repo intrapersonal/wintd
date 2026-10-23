@@ -189,7 +189,7 @@ class Sidecar:
         c = self.cfg
         self.src = self.source()
         self.width, self.height = self.src.width, self.src.height
-        cap = self.width * self.height * 4
+        cap = max(1920 * 1080 * 4, self.width * self.height * 4)
         self.frames = SlotWriter(self.frame_name, self.width * self.height * 3)
         self.video = ImageOut("wintd_video", cap, c.get("transport", "auto")) if c.get("video", True) else None
         self.ovl = ImageOut("wintd_overlay", cap, c.get("transport", "auto"))
