@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>wintd synth sheet</title>
+<style>
+:root{--bg:#141517;--chrome:#1f2023;--head:#28292d;--seam:#0b0c0d;--fg:#d9d8d3;--fg2:#9d9c97;--fg3:#66666a;--paper:#f6f7f4;--ink:#1d1f24;--ink2:#6a6d75;--rule:#c9ccd1;--now:#e3983f;
+--z1:#d9534f;--z2:#e2833a;--z3:#d9b23b;--z4:#5fae5a;--z5:#3fa3a8;--z6:#4c7fd1;--z7:#8a63d2;--z8:#c2569b;
+--ui:"Segoe UI Variable Text","Segoe UI",system-ui,sans-serif;--mono:"Cascadia Mono",Consolas,ui-monospace,monospace;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font:400 13px/1.4 var(--ui);display:flex;flex-direction:column;align-items:center;padding:18px 16px 24px;gap:12px}
+.top{width:min(760px,100%);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.title{font:500 12px var(--mono);color:var(--fg2);display:flex;align-items:center;gap:8px}
+.mark{width:12px;height:12px;border-radius:2px;background:linear-gradient(#4aa6d8,#4aa6d8) 0 0/6px 6px no-repeat,linear-gradient(#8d71dc,#8d71dc) 6px 0/6px 6px no-repeat,linear-gradient(#49b27c,#49b27c) 0 6px/6px 6px no-repeat,linear-gradient(#d9853b,#d9853b) 6px 6px/6px 6px no-repeat}
+.seg{margin-left:auto;display:flex;border:1px solid var(--seam);border-radius:3px;overflow:hidden}
+.seg button{font:inherit;color:var(--fg2);background:var(--chrome);border:0;padding:5px 12px;cursor:pointer}
+.seg button.on{background:#33527a;color:var(--fg)}
+.btn{font:inherit;color:var(--fg);background:#2d2e33;border:1px solid var(--seam);border-radius:3px;height:28px;padding:0 12px;cursor:pointer}
+.btn:hover{background:#383940}
+.btn:disabled{opacity:.4;cursor:default}
+.stage{width:min(760px,100%);perspective:1800px}
+.page{background:var(--paper);color:var(--ink);border-radius:4px;box-shadow:0 1px 0 rgba(255,255,255,.04),0 18px 40px rgba(0,0,0,.45);padding:26px 30px 22px;min-height:440px;transform-origin:left center;transition:transform .45s cubic-bezier(.3,.7,.3,1),opacity .45s}
+.page.out-left{transform:rotateY(-80deg);opacity:0}
+.page.out-right{transform:rotateY(80deg) translateX(30px);opacity:0}
+.page h1{font:600 22px var(--ui);margin:0;letter-spacing:-.01em}
+.meta{display:flex;gap:14px;color:var(--ink2);font:400 12px var(--mono);margin:4px 0 16px;flex-wrap:wrap}
+.how{display:flex;gap:8px;align-items:center;color:var(--ink2);font-size:12px;margin:0 0 14px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:4px;color:#fff;font:600 11px var(--mono)}
+.lines{display:grid;gap:16px}
+.line{display:flex;flex-wrap:wrap;gap:4px 3px;align-items:flex-start}
+.n{display:flex;flex-direction:column;align-items:stretch;gap:3px}
+.blk{height:34px;border-radius:5px;color:#fff;font:600 15px var(--mono);display:flex;align-items:center;padding-left:9px;position:relative;transition:transform .08s,box-shadow .08s}
+.blk.rest{background:transparent!important;border:1px dashed var(--rule);color:var(--ink2)}
+.blk.now{transform:translateY(-3px);box-shadow:0 0 0 2px var(--now),0 6px 12px rgba(0,0,0,.18)}
+.ly{font:400 11.5px var(--ui);color:var(--ink2);padding-left:2px;min-height:15px}
+.bar{width:1px;background:var(--rule);align-self:stretch;margin:0 5px}
+svg{display:block;max-width:100%;height:auto;overflow:visible}
+.staff line{stroke:var(--ink);stroke-width:1}
+.foot{display:flex;justify-content:space-between;align-items:center;margin-top:18px;color:var(--ink2);font:400 11.5px var(--mono)}
+.chord{display:inline-flex;flex-direction:column;align-items:center;gap:4px;margin:0 6px 8px 0;padding:8px 10px;border:1px solid var(--rule);border-radius:5px;min-width:70px}
+.chord b{font:600 16px var(--ui)}
+.chord span{font:400 11px var(--mono);color:var(--ink2)}
+.chord .chip{color:#fff;font:600 11px var(--mono)}
+.chord.now{box-shadow:0 0 0 2px var(--now)}
+.cgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.cgrid .chord{margin:0}
+.nav{width:min(760px,100%);display:flex;align-items:center;gap:8px}
+.nav .count{margin:0 auto;color:var(--fg3);font:400 11.5px var(--mono)}
+.legend{width:min(760px,100%);color:var(--fg3);font-size:11.5px}
+@media (max-width:560px){.page{padding:20px 16px}.blk{height:30px;font-size:13px}}
+@media (prefers-reduced-motion:reduce){.page{transition:none}}
+</style>
+</head>
+<body>
+<div class="top">
+  <span class="title"><span class="mark"></span>wintd synth sheet</span>
+  <div class="seg" role="group" aria-label="mode">
+    <button id="mEasy" class="on" type="button">Easy</button>
+    <button id="mStaff" type="button">Musician</button>
+  </div>
+  <button class="btn" id="play" type="button">Listen</button>
+</div>
+<div class="stage"><div class="page" id="page"></div></div>
+<div class="nav">
+  <button class="btn" id="prev" type="button">← Prev</button>
+  <span class="count" id="count"></span>
+  <button class="btn" id="next" type="button">Next →</button>
+</div>
+<div class="legend">arrow keys flip pages. space plays. in easy mode, raise your right hand to the number and pinch to play it, keep pinching for long notes.</div>
+<script>
+const SCALE = ["C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5"];
+const MIDI = { C4: 60, D4: 62, E4: 64, F4: 65, G4: 67, A4: 69, B4: 71, C5: 72 };
+const NAME = { C4: "C", D4: "D", E4: "E", F4: "F", G4: "G", A4: "A", B4: "B", C5: "C" };
+const STEP = { C4: 0, D4: 1, E4: 2, F4: 3, G4: 4, A4: 5, B4: 6, C5: 7 };
+const zone = (n) => SCALE.indexOf(n) + 1;
+const parse = (s) => s.trim().split(/\s+/).map((t) => {
+  const [n, b, ly] = t.split(":");
+  return { n: n === "r" ? null : n, b: parseFloat(b || "1"), ly: (ly || "").replace(/_/g, " ") };
+});
+const SONGS = [
+  { title: "Twinkle Twinkle Little Star", meta: "traditional · 4/4 · 100 bpm", bpm: 100, beats: 4, lines: [
+    "C4:1:Twin- C4:1:kle G4:1:twin- G4:1:kle A4:1:lit- A4:1:tle G4:2:star",
+    "F4:1:how F4:1:I E4:1:won- E4:1:der D4:1:what D4:1:you C4:2:are",
+    "G4:1:up G4:1:a- F4:1:bove F4:1:the E4:1:world E4:1:so D4:2:high",
+    "G4:1:like G4:1:a F4:1:dia- F4:1:mond E4:1:in E4:1:the D4:2:sky",
+    "C4:1:twin- C4:1:kle G4:1:twin- G4:1:kle A4:1:lit- A4:1:tle G4:2:star",
+    "F4:1:how F4:1:I E4:1:won- E4:1:der D4:1:what D4:1:you C4:2:are",
+  ] },
+  { title: "Mary Had a Little Lamb", meta: "traditional · 4/4 · 110 bpm", bpm: 110, beats: 4, lines: [
+    "E4:1:Ma- D4:1:ry C4:1:had D4:1:a E4:1:lit- E4:1:tle E4:2:lamb",
+    "D4:1:lit- D4:1:tle D4:2:lamb E4:1:lit- G4:1:tle G4:2:lamb",
+    "E4:1:Ma- D4:1:ry C4:1:had D4:1:a E4:1:lit- E4:1:tle E4:1:lamb E4:1:its",
+    "D4:1:fleece D4:1:was E4:1:white D4:1:as C4:4:snow",
+  ] },
+  { title: "Ode to Joy", meta: "beethoven, 1824 · 4/4 · 104 bpm", bpm: 104, beats: 4, lines: [
+    "E4 E4 F4 G4 G4 F4 E4 D4",
+    "C4 C4 D4 E4 E4:1.5 D4:0.5 D4:2",
+    "E4 E4 F4 G4 G4 F4 E4 D4",
+    "C4 C4 D4 E4 D4:1.5 C4:0.5 C4:2",
+  ] },
+  { title: "When the Saints Go Marching In", meta: "traditional · 4/4 · 120 bpm", bpm: 120, beats: 4, lines: [
+    "r:1 C4:1:oh E4:1:when F4:1:the G4:4:saints",
+    "r:1 C4:1:go E4:1:march- F4:1:ing G4:4:in",
+    "r:1 C4:1:oh E4:1:when F4:1:the G4:2:saints E4:2:go",
+    "C4:2:march- E4:2:ing D4:4:in",
+    "r:1 E4:1:oh E4:1:Lord D4:1:I C4:3:want C4:1:to",
+    "E4:2:be G4:1:in G4:1:that F4:4:number",
+    "r:1 E4:1:when F4:1:the G4:2:saints E4:2:go C4:2:march- D4:2:ing C4:4:in",
+  ] },
+  { title: "Jingle Bells", meta: "pierpont, 1857 · 4/4 · 120 bpm", bpm: 120, beats: 4, lines: [
+    "E4:1:jin- E4:1:gle E4:2:bells E4:1:jin- E4:1:gle E4:2:bells",
+    "E4:1:jin- G4:1:gle C4:1.5:all D4:0.5:the E4:4:way",
+    "F4:1:oh F4:1:what F4:1.5:fun F4:0.5:it F4:1:is E4:1:to E4:1:ride E4:0.5:in E4:0.5:a",
+    "E4:1:one D4:1:horse D4:1:o- E4:1:pen D4:2:sleigh G4:2:hey",
+  ] },
+  { title: "Frère Jacques", meta: "traditional · 4/4 · 110 bpm", bpm: 110, beats: 4, lines: [
+    "C4:1:Frè- D4:1:re E4:1:Jac- C4:1:ques C4:1:Frè- D4:1:re E4:1:Jac- C4:1:ques",
+    "E4:1:dor- F4:1:mez G4:2:vous E4:1:dor- F4:1:mez G4:2:vous",
+    "G4:0.5:son- A4:0.5:nez G4:0.5:les F4:0.5:ma- E4:1:ti- C4:1:nes G4:0.5:son- A4:0.5:nez G4:0.5:les F4:0.5:ma- E4:1:ti- C4:1:nes",
+  ] },
+];
+const CHORDS = {
+  title: "Chords: four-chord loop", meta: "left hand fingers = chord type · right hand = root",
+  rows: [
+    { n: "C4", q: "major", f: 3, name: "C" }, { n: "G4", q: "major", f: 3, name: "G" },
+    { n: "A4", q: "minor", f: 4, name: "Am" }, { n: "F4", q: "major", f: 3, name: "F" },
+  ],
+  bpm: 80,
+};
+const PAGES = [...SONGS.map((s) => ({ kind: "song", s: { ...s, notes: s.lines.map(parse) } })), { kind: "chords", s: CHORDS }];
+let idx = 0, mode = "easy", playing = null, actx = null;
+try { idx = Math.min(PAGES.length - 1, parseInt(localStorage.getItem("wintd-sheet-page") || "0", 10) || 0); mode = localStorage.getItem("wintd-sheet-mode") || "easy"; } catch (e) {}
+const zc = (z) => `var(--z${z})`;
+const $ = (id) => document.getElementById(id);
+
+function easy(s) {
+  const wrap = document.createElement("div");
+  wrap.className = "lines";
+  let k = 0;
+  s.notes.forEach((line) => {
+    const row = document.createElement("div");
+    row.className = "line";
+    let acc = 0;
+    line.forEach((nt) => {
+      const cell = document.createElement("div");
+      cell.className = "n";
+      const blk = document.createElement("div");
+      blk.className = "blk" + (nt.n ? "" : " rest");
+      blk.dataset.k = k++;
+      blk.style.width = `${Math.max(30, nt.b * 44)}px`;
+      if (nt.n) { blk.style.background = zc(zone(nt.n)); blk.textContent = zone(nt.n); } else blk.textContent = "·";
+      const ly = document.createElement("div");
+      ly.className = "ly";
+      ly.textContent = nt.ly;
+      cell.append(blk, ly);
+      row.append(cell);
+      acc += nt.b;
+      if (acc >= s.beats - 1e-6) {
+        acc -= s.beats;
+        const bar = document.createElement("div");
+        bar.className = "bar";
+        row.append(bar);
+      }
+    });
+    wrap.append(row);
+  });
+  return wrap;
+}
+
+function staff(s) {
+  const NS = "http://www.w3.org/2000/svg";
+  const wrap = document.createElement("div");
+  wrap.className = "lines";
+  const gap = 9, top = 26;
+  const yFor = (n) => top + 4 * gap - (STEP[n] - 2) * (gap / 2);
+  let k = 0;
+  s.notes.forEach((line) => {
+    const total = line.reduce((a, b) => a + b.b, 0);
+    const width = 70 + total * 46 + 20;
+    const svg = document.createElementNS(NS, "svg");
+    const vw = Math.max(width, 300);
+    svg.setAttribute("viewBox", `0 0 ${vw} 118`);
+    svg.setAttribute("width", vw);
+    const el = (tag, attrs, text) => { const e = document.createElementNS(NS, tag); for (const k2 in attrs) e.setAttribute(k2, attrs[k2]); if (text != null) e.textContent = text; svg.append(e); return e; };
+    for (let i = 0; i < 5; i++) el("line", { x1: 4, x2: width - 6, y1: top + i * gap, y2: top + i * gap, stroke: "#1d1f24", "stroke-width": 1 });
+    el("text", { x: 6, y: top + 4 * gap + 10, "font-size": 58, "font-family": "'Segoe UI Symbol','Noto Music','Apple Symbols',serif", fill: "#1d1f24" }, "\u{1D11E}");
+    let x = 62, acc = 0;
+    line.forEach((nt) => {
+      const cx = x + 12;
+      if (nt.n) {
+        const y = yFor(nt.n);
+        const hollow = nt.b >= 2;
+        const g = el("g", { "data-k": k });
+        const head = document.createElementNS(NS, "ellipse");
+        head.setAttribute("cx", cx); head.setAttribute("cy", y); head.setAttribute("rx", 5.6); head.setAttribute("ry", 4.1);
+        head.setAttribute("transform", `rotate(-20 ${cx} ${y})`);
+        head.setAttribute("fill", hollow ? "none" : "#1d1f24"); head.setAttribute("stroke", "#1d1f24"); head.setAttribute("stroke-width", 1.4);
+        g.append(head);
+        if (nt.n === "C4") { const l = document.createElementNS(NS, "line"); l.setAttribute("x1", cx - 9); l.setAttribute("x2", cx + 9); l.setAttribute("y1", y); l.setAttribute("y2", y); l.setAttribute("stroke", "#1d1f24"); g.append(l); }
+        if (nt.b < 4) {
+          const up = STEP[nt.n] < 6;
+          const st = document.createElementNS(NS, "line");
+          const sx = up ? cx + 5.2 : cx - 5.2;
+          st.setAttribute("x1", sx); st.setAttribute("x2", sx); st.setAttribute("y1", y); st.setAttribute("y2", up ? y - 30 : y + 30);
+          st.setAttribute("stroke", "#1d1f24"); st.setAttribute("stroke-width", 1.3);
+          g.append(st);
+          if (nt.b === 0.5) {
+            const fl = document.createElementNS(NS, "path");
+            const ty = up ? y - 30 : y + 30;
+            fl.setAttribute("d", up ? `M${sx} ${ty} q 8 6 7 16` : `M${sx} ${ty} q 8 -6 7 -16`);
+            fl.setAttribute("fill", "none"); fl.setAttribute("stroke", "#1d1f24"); fl.setAttribute("stroke-width", 1.4);
+            g.append(fl);
+          }
+        }
+        if (nt.b === 1.5 || nt.b === 3) { const d = document.createElementNS(NS, "circle"); d.setAttribute("cx", cx + 10); d.setAttribute("cy", y - 2); d.setAttribute("r", 1.6); d.setAttribute("fill", "#1d1f24"); g.append(d); }
+        el("text", { x: cx, y: 112, "text-anchor": "middle", "font-size": 10.5, fill: "#6a6d75", "font-family": "Segoe UI, system-ui, sans-serif" }, nt.ly);
+      } else {
+        el("rect", { x: cx - 4, y: top + gap * 1.5, width: 8, height: 4, fill: "#1d1f24", "data-k": k });
+      }
+      k++;
+      x += nt.b * 46;
+      acc += nt.b;
+      if (acc >= s.beats - 1e-6) {
+        acc -= s.beats;
+        el("line", { x1: x + 2, x2: x + 2, y1: top, y2: top + 4 * gap, stroke: "#1d1f24", "stroke-width": 1 });
+      }
+    });
+    wrap.append(svg);
+  });
+  return wrap;
+}
+
+function chords(c) {
+  const box = document.createElement("div");
+  const p = document.createElement("p");
+  p.className = "how";
+  p.textContent = mode === "easy" ? "right hand number picks the root. left hand: 3 fingers = major, 4 = minor. pinch to strum, each chord gets 4 beats." : "I – V – vi – IV in C. root from the right-hand zone, quality from the left-hand finger count.";
+  box.append(p);
+  const grid = document.createElement("div");
+  grid.className = "cgrid";
+  box.append(grid);
+  for (let r = 0; r < 2; r++) {
+    c.rows.forEach((row, i) => {
+      const d = document.createElement("div");
+      d.className = "chord";
+      d.dataset.k = r * c.rows.length + i;
+      const b = document.createElement("b");
+      b.textContent = row.name;
+      const chip = document.createElement("span");
+      chip.className = "chip";
+      chip.style.background = zc(zone(row.n));
+      chip.textContent = zone(row.n);
+      const f = document.createElement("span");
+      f.textContent = mode === "easy" ? `left: ${row.f} fingers` : `${NAME[row.n]} ${row.q}`;
+      d.append(b, chip, f);
+      grid.append(d);
+    });
+  }
+  return box;
+}
+
+function render(dir) {
+  const page = $("page");
+  const go = () => {
+    const P = PAGES[idx];
+    page.innerHTML = "";
+    const h = document.createElement("h1");
+    h.textContent = P.s.title;
+    const m = document.createElement("div");
+    m.className = "meta";
+    m.textContent = P.s.meta;
+    page.append(h, m);
+    if (P.kind === "song") {
+      if (mode === "easy") {
+        const how = document.createElement("div");
+        how.className = "how";
+        how.append("zones:");
+        SCALE.forEach((n, i) => { const c = document.createElement("span"); c.className = "chip"; c.style.background = zc(i + 1); c.textContent = i + 1; c.title = NAME[n]; how.append(c); });
+        how.append("low → high. wider block = hold longer.");
+        page.append(how, easy(P.s));
+      } else page.append(staff(P.s));
+    } else page.append(chords(P.s));
+    const foot = document.createElement("div");
+    foot.className = "foot";
+    const l = document.createElement("span");
+    l.textContent = mode === "easy" ? "easy mode" : "musician mode";
+    const r = document.createElement("span");
+    r.textContent = `${idx + 1} / ${PAGES.length}`;
+    foot.append(l, r);
+    page.append(foot);
+    $("count").textContent = `${idx + 1} / ${PAGES.length}`;
+    $("prev").disabled = idx === 0;
+    $("next").disabled = idx === PAGES.length - 1;
+    $("mEasy").classList.toggle("on", mode === "easy");
+    $("mStaff").classList.toggle("on", mode !== "easy");
+    try { localStorage.setItem("wintd-sheet-page", idx); localStorage.setItem("wintd-sheet-mode", mode); } catch (e) {}
+  };
+  if (!dir) { go(); return; }
+  page.classList.add(dir > 0 ? "out-left" : "out-right");
+  setTimeout(() => { go(); page.classList.remove("out-left", "out-right"); }, 260);
+}
+
+function stop() {
+  if (playing) { playing.forEach((t) => clearTimeout(t)); playing = null; }
+  document.querySelectorAll(".now").forEach((e) => e.classList.remove("now"));
+  $("play").textContent = "Listen";
+}
+
+function tone(midi, at, dur) {
+  const f = 440 * Math.pow(2, (midi - 69) / 12);
+  const o = actx.createOscillator(), o2 = actx.createOscillator(), g = actx.createGain(), lp = actx.createBiquadFilter();
+  o.type = "triangle"; o2.type = "sawtooth"; o.frequency.value = f; o2.frequency.value = f * 1.003;
+  lp.type = "lowpass"; lp.frequency.value = 2200;
+  const g2 = actx.createGain(); g2.gain.value = 0.12;
+  o.connect(g); o2.connect(g2); g2.connect(g); g.connect(lp); lp.connect(actx.destination);
+  g.gain.setValueAtTime(0, at);
+  g.gain.linearRampToValueAtTime(0.22, at + 0.015);
+  g.gain.exponentialRampToValueAtTime(0.09, at + Math.min(0.25, dur * 0.6));
+  g.gain.setTargetAtTime(0.0001, at + dur * 0.92, 0.05);
+  o.start(at); o2.start(at); o.stop(at + dur + 0.3); o2.stop(at + dur + 0.3);
+}
+
+function play() {
+  if (playing) { stop(); return; }
+  actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+  const P = PAGES[idx];
+  const spb = 60 / P.s.bpm;
+  const t0 = actx.currentTime + 0.1;
+  playing = [];
+  let t = 0;
+  const mark = (k) => {
+    document.querySelectorAll(".now").forEach((e) => e.classList.remove("now"));
+    const el = document.querySelector(`[data-k="${k}"]`);
+    if (el) el.classList.add("now");
+  };
+  if (P.kind === "song") {
+    let k = 0;
+    P.s.notes.flat().forEach((nt) => {
+      const kk = k++;
+      if (nt.n) tone(MIDI[nt.n], t0 + t, nt.b * spb);
+      playing.push(setTimeout(() => mark(kk), (t + 0.1) * 1000));
+      t += nt.b * spb;
+    });
+  } else {
+    const rows = [...P.s.rows, ...P.s.rows];
+    rows.forEach((row, i) => {
+      const root = MIDI[row.n] - 12;
+      const third = row.q === "minor" ? 3 : 4;
+      [0, third, 7, 12].forEach((iv, j) => tone(root + iv, t0 + t + j * 0.03, spb * 4));
+      playing.push(setTimeout(() => mark(i), (t + 0.1) * 1000));
+      t += spb * 4;
+    });
+  }
+  playing.push(setTimeout(stop, (t + 0.4) * 1000));
+  $("play").textContent = "Stop";
+}
+
+$("prev").addEventListener("click", () => { if (idx > 0) { stop(); idx--; render(-1); } });
+$("next").addEventListener("click", () => { if (idx < PAGES.length - 1) { stop(); idx++; render(1); } });
+$("mEasy").addEventListener("click", () => { mode = "easy"; stop(); render(); });
+$("mStaff").addEventListener("click", () => { mode = "staff"; stop(); render(); });
+$("play").addEventListener("click", play);
+document.addEventListener("keydown", (e) => {
+  if (e.key === "ArrowRight") $("next").click();
+  else if (e.key === "ArrowLeft") $("prev").click();
+  else if (e.key === " ") { e.preventDefault(); play(); }
+});
+let sx = null;
+$("page").addEventListener("touchstart", (e) => { sx = e.touches[0].clientX; }, { passive: true });
+$("page").addEventListener("touchend", (e) => {
+  if (sx == null) return;
+  const dx = e.changedTouches[0].clientX - sx;
+  if (dx < -50) $("next").click(); else if (dx > 50) $("prev").click();
+  sx = null;
+});
+render();
+</script>
+</body>
+</html>
