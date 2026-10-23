@@ -81,7 +81,7 @@ class ImageOut:
 
 class DataOut:
     def __init__(self, name, capacity):
-        self.shm = SlotWriter(name + "_px", capacity)
+        self.shm = SlotWriter(name, capacity)
 
     def send(self, arr):
         self.shm.write(arr)
