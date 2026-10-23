@@ -58,9 +58,9 @@ streams turn on and off live, no restart. every stream is off until you turn it 
 
 in `examples/`, each one is a .toe you can open and pick apart.
 
-1. **paint**: pinch to draw. pinch with your other hand to eyedrop a color straight out of the room and paint with it. fist clears
+1. **paint**: point your left hand at anything in the room, a loupe shows what you're aiming at with the hex code, pinch to grab that color. pinch with your right hand to draw. both fists clears
 2. **synth**: right hand height picks one of 8 notes, pinch plays it, left hand fingers pick the chord. comes with `sheet.html`, a little flippable song sheet. easy mode shows numbers, musician mode shows the actual staff
-3. **point cloud**: your room as a 3d point cloud from the depth stream, spin and zoom it with your hands
+3. **point cloud**: your room as a 3d point cloud from the depth stream. right hand turns it, spread both hands to zoom
 4. **color portal**: the color portal from [ojrgb's tutorial](https://www.youtube.com/watch?v=uTyXW1rDakA), rebuilt on wintd. all credit for the effect goes to him
 
 ## why not just use the mediapipe plugin?
@@ -113,6 +113,7 @@ the camera frame goes to the stream processes through shared memory, each one ru
 - **no video**: another app has the camera (discord, obs, a browser tab). close it and hit Restart
 - **channels show up with a `/` in front**: they're stripped inside the component already, but if you use your own osc in chop set it up the same way
 - **spout doesn't work on your machine**: set Image Transport to Shared Memory
+- **only run one wintd at a time**: two projects (or two td windows) with wintd active fight over the same ports and camera, the second one gets nothing. close the other one or change OSC Port on the Advanced page
 
 ## thanks
 
