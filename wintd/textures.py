@@ -53,11 +53,11 @@ class ImageOut:
         if self.mode == "spout":
             if alpha is None:
                 img = np.empty(bgr.shape[:2] + (4,), np.uint8)
-                img[:, :, :3] = bgr
+                img[:, :, :3] = bgr[:, :, ::-1]
                 img[:, :, 3] = 255
             else:
-                img = np.dstack([bgr, alpha])
-            if self.spout.send(img, GL_BGRA) or self.spout.fails < 30:
+                img = np.dstack([bgr[:, :, ::-1], alpha])
+            if self.spout.send(img, GL_RGBA) or self.spout.fails < 30:
                 return
             self.spout.close()
             self.spout = None
