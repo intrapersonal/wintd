@@ -1,6 +1,7 @@
 def onStart():
     c = parent()
-    c.CheckInstall()
+    if c.CheckInstall():
+        c.RefreshCameras()
     if c.par.Active.eval():
         run("args[0].Start()", c, delayFrames=30)
 
@@ -11,3 +12,7 @@ def onExit():
 
 def onProjectPreSave():
     return
+
+
+def onCreate():
+    onStart()
