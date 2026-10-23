@@ -71,7 +71,7 @@ class HandsWorker:
             arr = np.array([[p.x, p.y, p.z] for p in h], dtype=np.float64)
             cat = res.handedness[i][0]
             label = cat.category_name
-            if not self.cfg.get("mirror", True):
+            if self.cfg.get("mirror", True):
                 label = "Right" if label == "Left" else "Left"
             hands.append((arr, label, float(cat.score)))
         return hands
