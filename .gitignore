@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+*.part
+/build/
+/dist/
+*.egg-info/
+launcher/universal/universal-dev*
+.DS_Store
+Backup/
+*.toe.bak

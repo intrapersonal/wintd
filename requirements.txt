@@ -1,0 +1,7 @@
+numpy==1.26.4
+opencv-contrib-python==4.10.0.84
+mediapipe==0.10.14
+onnxruntime-directml==1.18.0; sys_platform == "win32"
+onnxruntime==1.18.0; sys_platform != "win32"
+SpoutGL; sys_platform == "win32"
+cv2_enumerate_cameras
