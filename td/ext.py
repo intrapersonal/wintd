@@ -251,10 +251,11 @@ class WintdExt:
         env = dict(os.environ)
         env.pop("PYTHONHOME", None)
         env["PYTHONPATH"] = str(root / "pkg")
+        boot, files = self.bootstrap(), self.Files()
 
         def job():
             try:
-                self.bootstrap().write_package(self.Files(), root)
+                boot.write_package(files, root)
                 r = subprocess.run([py, "-m", "wintd", "--list-cameras"], capture_output=True, text=True, timeout=30, env=env, creationflags=NO_WINDOW)
                 cams = json.loads(r.stdout.strip().splitlines()[-1])
                 self.q.put(("cams", cams))
