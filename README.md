@@ -1,5 +1,7 @@
 # wintd
 
+![wintd color portal demo](gif.gif)
+
 hands, face, pose, body masks and depth for touchdesigner on windows. runs in its own process so your project keeps its framerate, and installs itself with one button.
 
 ## install
